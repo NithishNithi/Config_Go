@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package yourpackage;
+
+option go_package = "github.com/kishorens18";
+
+import "google/protobuf/any.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/struct.proto";
+
+message Application {
+    string id =1;
+    string Name = 2;
+    repeated Request Request = 3;
+}
+
+message Request {
+    string ApplicationName = 1;
+    string Key = 2;
+    string Value = 3;
+}
+service MyService {
+    rpc AddApplication(AddApplicationRequest)returns(AddApplicationResponse);
+    rpc InsertConfig(Request) returns (google.protobuf.Empty);
+    rpc GetConfig(GetDataRequest) returns(GetDataResponse);
+    // rpc AddConfig(AddConfigRequest)returns(google.protobuf.Empty);
+    rpc WatchConfig(WatchDataRequest) returns (stream GetDataResponse);
+
+}
+message AddApplicationRequest{
+    string ApplicationName = 1;
+}
+
+message AddApplicationResponse{
+    string ApplicationId = 1;
+}
+
+message AddConfigRequest {
+    string id =1;
+    string Key = 2;
+    google.protobuf.Any Value = 3;
+}
+
+message GetDataRequest {
+    string key = 1;
+}
+message GetDataResponse {
+        map<string, google.protobuf.Value> data = 1;
+}
+
+message GetDataMessage {
+    string id =1;
+    string Name = 2;
+    string Key = 3;
+    string Value = 4;
+}
+
+
+message WatchDataRequest {
+    string key = 1;
+}
